@@ -1,0 +1,112 @@
+* {
+	margin: 0px;
+	padding: 0px;
+}
+
+body {
+	background-color: #8b0000;
+}
+
+.main {
+	text-align: center;
+	background-color: #8b0000;
+	color: #CBA135;
+}
+
+.main  h1{
+	font-size: 2em;
+	margin: 10px;
+}
+
+.main p {
+	margin-left: 20%;
+	margin-right: 20%;
+}
+
+.DevShowHide {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	margin: 10px;
+}
+
+.DevShowHide a {
+	background: white;
+	border: 1px solid black;
+	padding: 10px;
+	cursor: pointer;
+}
+
+.dev_area {
+	background-color: white;
+	height: 800px;
+	overflow: hidden;
+	transition: height 1s;
+}
+
+.dev_area.hidden {
+	height: 0px;
+	overflow: hidden;
+	transition: height 1s;
+}
+
+.dev_header {
+	background-color: #DDD;
+}
+
+.dev_header h1 {
+	padding-left: 10px;
+	padding-top: 10px;
+}
+
+.dev_nav {
+	margin-top: 50px;
+	padding-bottom: 10px;
+	padding-top: 10px;
+	text-align: center;
+	background: #333;
+}
+
+.dev_nav ul li {
+	display: inline;
+	padding: 10px;
+	background: white;
+}
+
+.dev_nav ul li:hover {
+	background: #DDD;
+}
+
+.build_info_area {
+	box-sizing: border-box;
+	border: solid 2px limegreen;
+	float: left;
+	width: 50%;
+	height: 665px;
+}
+
+.build_info_msg {
+	color: limegreen;
+	margin: 10px;
+}
+
+.build_info_msg hr {
+	border-color: limegreen;
+}
+
+.build_comment_area {
+	box-sizing: border-box;
+	border: solid 2px royalblue;
+	color: royalblue;
+	float: left;
+	width: 50%;
+	height: 665px;
+}
+
+.build_comment {
+	margin: 10px;
+}
+
+.build_comment_area hr {
+	border-color: royalblue;
+}
