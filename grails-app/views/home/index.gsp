@@ -26,10 +26,10 @@
 		<section class="build_info_area">
 			<g:each in="${builds.reverse()}" var="build">
 				<div class="build_info_msg">
-				<p class="buildNo">${build[0] }</p>
-				<p class="commit_msg">${build[1]}</p>
-				<hr>
-			</div>
+					<p class="buildNo">${build[0] }</p>
+					<p class="commit_msg">${build[1]}</p>
+					<hr>
+				</div>
 			</g:each>
 			<!-- Template 
 			<div class="build_info_msg">

@@ -29,7 +29,8 @@ class HomeController {
 			consectetur lectus, quis congue mauris."],
 			["Build #1.1", "Lorem ipsum dolor sit amet"],
 			["Build #1.2", "Lorem ipsum dolor sit amet"],
-			["Build #1.3", "Testing build message; Automatically embedded"]
+			["Build #1.3", "Testing build message; Automatically embedded"],
+			["Build #1.4", "Testing build message 2; Automatically embedded"]
 		]
 		
 		return [builds: builds]
