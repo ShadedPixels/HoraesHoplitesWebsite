@@ -24,13 +24,20 @@
 			</nav>
 		</header>
 		<section class="build_info_area">
-			<!-- Template -->
+			<g:each in="${builds.reverse()}" var="build">
+				<div class="build_info_msg">
+				<p class="buildNo">${build[0] }</p>
+				<p class="commit_msg">${build[1]}</p>
+				<hr>
+			</div>
+			</g:each>
+			<!-- Template 
 			<div class="build_info_msg">
 				<p class="buildNo">Build #</p>
 				<p class="commit_msg">Commit Message...</p>
 				<hr>
 			</div>
-			<!-- Placeholders -->
+			<!-- Placeholders 
 			<div class="build_info_msg">
 				<p class="buildNo">Build #1.2</p>
 				<p class="commit_msg">Lorem ipsum dolor sit amet.</p>
@@ -49,7 +56,7 @@
 					accumsan nec. Proin commodo, velit a dignissim luctus, tortor odio
 					consectetur lectus, quis congue mauris.</p>
 				<hr>
-			</div>
+			</div> -->
 		</section>
 
 		<section class="build_comment_area">
