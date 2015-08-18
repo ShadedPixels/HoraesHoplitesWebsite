@@ -1,4 +1,4 @@
-package hhoplites
+package horaeshopliteswebsite
 
 import grails.converters.JSON
 import grails.converters.XML
