@@ -3,7 +3,7 @@
 	<head>
 		<title>Dummy Page</title>
 		<meta charset="utf-8"/>
-		<link rel="stylesheet" href="placeholder.css" type="text/css" media="all"/>
+		<link rel="stylesheet" href='<g:resource dir="css" file="temp_seans_placeholder.css" />' type="text/css" media="all"/>
 	</head>
 	<body>
 	<h1>Database Access Mockup</h1>
@@ -32,5 +32,5 @@
 		</p>
 		<button onclick="signup();">Sign Up</button>
 	</div>
-	<script src="filler.js"></script>
+	<script src='<g:resource dir="javascripts" file="temp_seans_filler.js"/>'></script>
 </html>

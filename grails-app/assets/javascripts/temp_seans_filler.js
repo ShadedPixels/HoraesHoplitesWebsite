@@ -1,4 +1,4 @@
-import spock.lang.*
+/*import spock.lang.*
  
 class ExceptionHandlerSpec extends Specification {
  
@@ -21,7 +21,7 @@ class ExceptionHandlerSpec extends Specification {
 	Integer.parseInt("-2147483648", 10)then:
 	notThrown(NumberFormatException )
 	}
-}
+}*/
 
 var login = function(){
 	console.log("whoop!");

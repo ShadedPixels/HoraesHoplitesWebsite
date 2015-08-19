@@ -6,11 +6,11 @@ class Game {
 	
 	String name 
 	
-	static hasOne = [creator: User]
+	//static hasOne = [creator: User]
 	
-	static hasMany = [participants: User]
+	//static hasMany = [participants: User]
 
     static constraints = {
-		creator nullable: false
+		//creator nullable: false
     }
 }
