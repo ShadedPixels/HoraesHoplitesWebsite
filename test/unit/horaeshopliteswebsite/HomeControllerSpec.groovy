@@ -1,6 +1,7 @@
-package hhoplites
+package horaeshopliteswebsite
 
 import grails.test.mixin.TestFor
+import horaeshopliteswebsite.HomeController;
 import spock.lang.Specification
 
 /**
