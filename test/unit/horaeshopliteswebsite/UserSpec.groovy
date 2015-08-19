@@ -1,6 +1,8 @@
 package horaeshopliteswebsite
 
 import grails.test.mixin.TestFor
+import grails.test.mixin.TestMixin
+import grails.test.mixin.hibernate.HibernateTestMixin
 import spock.lang.Specification
 
 /**
@@ -15,6 +17,14 @@ class UserSpec extends Specification {
     def cleanup() {
     }
 
-    void "test something"() {
+    void "user creation"() {
+		when: 'user Joe created'
+			def joe = new User(username: "Joe").save()
+		then: 
+			joe.username == "Joe"
+			User.list().size() == 1 // Only one user in the test db
+			User.get(1) == joe // that user is joe
     }
+	
+	
 }
