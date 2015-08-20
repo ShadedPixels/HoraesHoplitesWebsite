@@ -1,8 +1,7 @@
 package horaeshopliteswebsite
 
 import grails.test.mixin.TestFor
-import grails.test.mixin.TestMixin
-import grails.test.mixin.hibernate.HibernateTestMixin
+import grails.validation.ValidationException
 import spock.lang.Specification
 
 /**
@@ -24,7 +23,17 @@ class UserSpec extends Specification {
 			joe.username == "Joe"
 			User.list().size() == 1 // Only one user in the test db
 			User.get(1) == joe // that user is joe
+			
+		when: 'attempt to create 2 users with same username'
+			// flush property is important!!! otherwise test fails; read GORM Gotchas articles
+			def doe = new User(username: 'Doe').save(failOnError: true, flush: true)
+			def doe_dup = new User(username: 'Doe').save(failOnError: true, flush: true)
+		then: 'exception'
+			ValidationException e = thrown(ValidationException)
+			e.message.contains("on field 'username': rejected value [Doe];")
     }
 	
 	
 }
+	
+	
