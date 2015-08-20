@@ -25,6 +25,19 @@ class ExceptionHandlerSpec extends Specification {
 
 var login = function(){
 	console.log("whoop!");
+	
+	$.ajax({
+        url: "game/ajax_response",
+        type:"post",
+        dataType: 'json',
+        data:{test: "HECK"},//ids:JSON.stringify(idList), option:option, id:id}
+        success: function(data) {
+            console.log(data); //<-----this logs the data in browser's console
+        },
+        error: function(xhr){
+            alert(xhr.responseText); //<----when no data alert the err msg
+        }
+    });
 };
 
 var playNow = function(){

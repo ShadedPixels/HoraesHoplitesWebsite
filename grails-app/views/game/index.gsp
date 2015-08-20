@@ -4,6 +4,8 @@
 		<title>Dummy Page</title>
 		<meta charset="utf-8"/>
 		<link rel="stylesheet" href='<g:resource dir="css" file="temp_seans_placeholder.css" />' type="text/css" media="all"/>
+ 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+ 		<script src='<g:resource dir="javascripts" file="temp_seans_filler.js"/>'></script>
 	</head>
 	<body>
 	<h1>Database Access Mockup</h1>
@@ -32,5 +34,5 @@
 		</p>
 		<button onclick="signup();">Sign Up</button>
 	</div>
-	<script src='<g:resource dir="javascripts" file="temp_seans_filler.js"/>'></script>
+
 </html>
