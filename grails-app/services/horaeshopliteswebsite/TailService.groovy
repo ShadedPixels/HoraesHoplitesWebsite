@@ -1,5 +1,16 @@
 package horaeshopliteswebsite
 
+/* USAGE:
+ * 		
+		def file = new File("/tmp/woodpecker.log")
+		tailService.tail("test", file){
+				log_array << it
+				print log_array
+		}
+
+		tailService.stop("test")
+ */
+
 import grails.transaction.Transactional
 
 import org.apache.commons.io.input.Tailer
