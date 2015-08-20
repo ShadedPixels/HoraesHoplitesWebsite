@@ -1,16 +1,17 @@
 package horaeshopliteswebsite
 
 class Game {
-	
-	boolean multiplayer
-	
+		
 	String name 
 	
-	//static hasOne = [creator: User]
+	User creator
 	
-	//static hasMany = [participants: User]
-
+	static hasMany = [participants: User]
+	
+	static belongsTo = [User]
+	
     static constraints = {
-		//creator nullable: false
+		creator nullable: false
+		name nullable: true
     }
 }
