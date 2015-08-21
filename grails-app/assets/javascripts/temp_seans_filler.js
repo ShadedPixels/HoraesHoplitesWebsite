@@ -57,10 +57,9 @@ function main(){
     	return data
     }
 
-
-    function playNow(){
+    attach_listener("#playNow", "click", function(event){
         console.log("aggle aggle!");
-    };
+    })
     
     attach_listener("#loginForm", "submit", function(event){
     	default_ajax_call(extract_form_information(this))
