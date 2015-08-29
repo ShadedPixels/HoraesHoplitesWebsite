@@ -33,6 +33,14 @@ class UserSpec extends Specification {
 			e.message.contains("on field 'username': rejected value [Doe];")
     }
 	
+	void "user fetching"(){
+		when: 'attempt to fetch non-existing user'
+			User user = User.findByUsername('does_not_exist')
+		then: 'object is null'
+			user == null
+			
+	}
+	
 	
 }
 	
