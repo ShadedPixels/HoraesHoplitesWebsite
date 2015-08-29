@@ -19,7 +19,7 @@ class GameService {
 		User creator = userService.getByUsername(creator_username)
 		if(creator == null){
 			log.info("User ${creator_username} not found")
-			return -1
+			return [false, null]
 		}
 		
 		Game game = new Game(name: name, creator: creator).save();
@@ -27,9 +27,9 @@ class GameService {
 		game = game.save(flush:true)
 		if(game == null){
 			// if failed to save
-			return -1
+			return [false, null]
 		}
-		return game.id
+		return [true, game.id]
 	}
 	
 	@Transactional

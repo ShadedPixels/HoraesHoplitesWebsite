@@ -22,11 +22,12 @@ class GameServiceSpec extends Specification {
 			User john = new User(username: "John").save(flush: true, failOnError: true)
 			
 		when:
-			def game_id = service.create("game1", "John")
+			def (success, game_id) = service.create("game1", "John")
 			service.userService.getByUsername(_) >> john;
 			
 		then:
-			game_id >= 0 // not an error flag 
+			success == true
+			game_id != null // not an error flag 
 			
 			Game.list().size() == 1
 			Game game = Game.findByName("game1")
@@ -49,7 +50,7 @@ class GameServiceSpec extends Specification {
 			User creator = new User(username: "creator").save()
 			User participant = new User(username: "participant").save(flush: true, failOnError: true)
 			
-			def game_id = service.create("game", "creator")
+			def (game_created, game_id) = service.create("game", "creator")
 			Game game = Game.get(game_id)
 		
 		when: "new participant added"
