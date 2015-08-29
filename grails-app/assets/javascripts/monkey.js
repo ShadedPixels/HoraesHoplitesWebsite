@@ -92,7 +92,7 @@ function main(){
 		var target = document.getElementById("leftTable");
 		var crntData;
 		var crntRow;
-		var l = gameList.length;//gameList.size;
+		var l = games.length;//gameList.size;
 		
 		//create headings
 		crntRow = document.createElement("tr");
@@ -186,11 +186,14 @@ function main(){
 			crntRow.className = "rightTableRow";//set table class for later css styling
 			
 			crntData = document.createElement("td");
-			crntData.innerHTML = gameList[i];
+			crntData.innerHTML = playerList[i];
 			crntRow.appendChild(crntData);
 			
 			target.appendChild(crntRow);
 		}
 		return;
 	};
-};
+	
+	loadLeftTable();
+	loadRightTable();
+}; // end main
