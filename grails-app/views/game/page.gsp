@@ -3,8 +3,8 @@
 	<head>
 		<title>Page!</title>
 		<meta charset="utf-8"/>
-		<link rel="stylesheet" href="grog.css" type="text/css" media="all"/>
-		<script src="monkey.js"></script>
+		<link rel="stylesheet" href='<g:resource dir="stylesheets" file="grog.css"/>' type="text/css" media="all"/>
+		<script src='<g:resource dir="javascripts" file="monkey.js"/>'></script>
 	</head>
 	<body>
 		<div>
