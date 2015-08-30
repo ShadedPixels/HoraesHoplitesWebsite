@@ -1,5 +1,6 @@
 package horaeshopliteswebsite
 
+import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.validation.ValidationException
 import spock.lang.Specification
@@ -8,6 +9,7 @@ import spock.lang.Specification
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
 @TestFor(User)
+@Mock([Game])
 class UserSpec extends Specification {
 
     def setup() {
@@ -39,6 +41,24 @@ class UserSpec extends Specification {
 		then: 'object is null'
 			user == null
 			
+	}
+	
+	void "add games to user"(){
+		setup:
+			def user = new User(username: "John").save(flush: true, failOnError: true)
+			def game = new Game(name: "game", creator: user).save(flush: true, failOnError: true)
+		
+//		when: "added a game to user"
+//			user.addToGames(game)
+//			user = user.save(flush: true, failOnError: true)
+//		then:
+//			user.games.sort() == [game].sort()
+			
+		when: "added creator as the participant to game"
+			game.addToParticipants(user)
+			game = game.save(flush: true, failOnError: true)
+		then:
+			game.participants.sort() == [user].sort()
 	}
 	
 	
