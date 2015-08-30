@@ -56,43 +56,8 @@ function main(){
     	$(form_object).serializeArray().map(function(x){data[x.name] = x.value;});
     	return data
     }
-
-    attach_listener("#playNow", "click", function(event){
-        console.log("aggle aggle!");
-    })
-    
-    attach_listener("#refreshGames", "click", function(event){
-        console.log("refreshing games");
-        games = default_ajax_call({}, 'list games', function(data){
-	        console.log(data)
-			loadLeftTable(data);
-        });
-    })
-    
-    attach_listener("#refreshUsers", "click", function(event){
-        console.log("refreshing users");
-        default_ajax_call({}, 'list users', function(data){
-	        console.log(data);
-			loadRightTable(data);
-    });
-    })
-    
-    attach_listener("#createGame", "submit", function(event){
-    	var game_info = extract_form_information(this)
-    	var data = {'game_name': game_info.gameName, 'creator_username': game_info.gameCreator} 
-
-    	default_ajax_call(data, "create game")
-    })
-    
-    attach_listener("#createUser", "submit", function(event){
-    	var user_info = extract_form_information(this)
-    	var data = {'username': user_info.userName}
-
-    	default_ajax_call(data, "create user")
-    })
 	
-	
-	function loadLeftTable(games){
+	var loadLeftTable = function loadLeftTable(games){
 	
     	var TABLE_ID = "leftTable";
     	var ROW_CLASS = TABLE_ID + "Row";
@@ -100,6 +65,10 @@ function main(){
 	
 		//get leftTable
 		var table = $("#" + TABLE_ID);
+		
+		table.find("tr:gt(0)").remove(); // delete all rows except first (done this obscurely due to some bug)
+
+		
 		var crntRow;
 		var l = games.length;//gameList.size;
 		
@@ -131,24 +100,39 @@ function main(){
 		return;
 	};
 	
-	function loadRightTable(playerList){
+	var loadRightTable = function loadRightTable(playerList){
+		var TABLE_ID = "rightTable";
+    	var ROW_CLASS = TABLE_ID + "Row";
+    		
+		//get leftTable
+		var table = $("#" + TABLE_ID);
 		
-		
-		var target = $("#rightTable");
-		var crntData;
-		
+		table.find("tr:gt(0)").remove(); // delete all rows except first
+				
 		var l = playerList.length;//gameList.size;
 		
 		for (i=0;i<l;i++){
-			var crntRow = $('<tr>', {class: "rightTableRow"}); //set table class for later css styling
+			var crntRow = $('<tr>', {class: ROW_CLASS}); //set table class for later css styling
 			
-			crntData = $("<td>").html(playerList[i]);
+			var crntData = $("<td>").html(playerList[i]['username']);
 			
 			crntRow.append(crntData);
 			
-			target.append(crntRow);
+			table.append(crntRow);
 		}
 		return;
+	};
+	
+	var refresh_games = function refreshUsers(){
+        games = default_ajax_call({}, 'list games', function(data){
+			loadLeftTable(data.game_array);
+        });
+	};
+	
+	var refresh_users = function refreshGames() {
+        default_ajax_call({}, 'list users', function(data){
+			loadRightTable(data.user_array);
+        });
 	};
 	
 	// things to execute immediately (should go last)
@@ -162,18 +146,44 @@ function main(){
 		];
 		
 		var playerList = [
-		      			"DK",
-		      			"bb",
-		      			"dukakes",
-		      			"myself",
-		      			"joe",
-		      			"bloe",
-		      			"schmoe"
+			{username: "DK"},
+			{username: "bb"},
+			{username: "dukakes"},
+			{username: "myself"},
+			{username: "joe"},
+			{username: "bloe"},
+			{username: "schmoe"}
 		];
 		
 		
 		loadLeftTable(games);
 		loadRightTable(playerList);
+		
+		attach_listener("#playNow", "click", function(event){
+	        console.log("aggle aggle!");
+	    })
+	    
+	    attach_listener("#refreshGames", "click", refresh_games);
+	    
+	    attach_listener("#refreshUsers", "click", refresh_users);
+	    
+	    attach_listener("#createGame", "submit", function(event){
+	    	var game_info = extract_form_information(this)
+	    	var data = {'game_name': game_info.gameName, 'creator_username': game_info.gameCreator} 
+
+	    	default_ajax_call(data, "create game", function(data){
+		    	refresh_games(); // refresh game list  		
+	    	});
+	    })
+	    
+	    attach_listener("#createUser", "submit", function(event){
+	    	var user_info = extract_form_information(this)
+	    	var data = {'username': user_info.userName}
+
+	    	default_ajax_call(data, "create user", function(data){
+		    	refresh_users(); // update user list
+	    	});
+	    })
 		
 	})();
 }; // end main
