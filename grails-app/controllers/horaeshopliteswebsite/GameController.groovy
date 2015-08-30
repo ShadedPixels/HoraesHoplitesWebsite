@@ -33,7 +33,7 @@ class GameController {
 				break
 				
 			case 'create game':
-				def game_name = data.game_name || ""
+				def game_name = data.game_name ?: ""
 				def creator_username = data.creator_username
 				def(success, game_id) = gameService.create(game_name, creator_username)
 				reply << ['success': success, 'game_id': game_id]

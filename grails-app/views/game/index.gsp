@@ -17,6 +17,7 @@
 			<div id="left">
 				<form id="createGame">
 					<input type="text" name="gameName">
+					<input type="text" name="gameCreator">
 					<input type="submit" value="Create Game">
 				</form>
 				<div>

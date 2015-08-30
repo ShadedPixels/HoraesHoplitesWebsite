@@ -62,11 +62,17 @@ function main(){
     })
     
     attach_listener("#createGame", "submit", function(event){
-    	default_ajax_call(extract_form_information(this))
+    	var game_info = extract_form_information(this)
+    	var data = {'game_name': game_info.gameName, 'creator_username': game_info.gameCreator} 
+
+    	default_ajax_call(data, "create game")
     })
     
     attach_listener("#createUser", "submit", function(event){
-    	default_ajax_call(extract_form_information(this))
+    	var user_info = extract_form_information(this)
+    	var data = {'username': user_info.userName}
+
+    	default_ajax_call(data, "create user")
     })
     
 	
@@ -194,6 +200,9 @@ function main(){
 		return;
 	};
 	
-	loadLeftTable();
-	loadRightTable();
+	// things to execute immediately (should go last)
+	(function call_immediately(){
+		loadLeftTable();
+		loadRightTable();
+	})()
 }; // end main
