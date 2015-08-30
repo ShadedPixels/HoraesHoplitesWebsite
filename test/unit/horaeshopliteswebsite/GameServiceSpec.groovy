@@ -37,7 +37,7 @@ class GameServiceSpec extends Specification {
 			
 			game == service.getById(game_id)
 			
-			service.list() == [[game.id, game.name]]
+			service.list() == [[id: game.id, name: game.name, creator: game.creator.username, participants: game.participants*.username]]
 			
 			game.creator == john // creator is correct
 			

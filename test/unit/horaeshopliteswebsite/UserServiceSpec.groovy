@@ -33,6 +33,6 @@ class UserServiceSpec extends Specification {
 			def user1 = new User(username: "user1").save(flush: true, failOnError: true)
 			def user2 = new User(username: "user2").save(flush: true, failOnError: true)
 		then:
-			service.list().sort() == [["user1"], ["user2"]].sort()
+			service.list().sort() == [[username: "user1"], [username: "user2"]].sort()
 	}
 }

@@ -54,7 +54,8 @@ class GameService {
 	
 	@Transactional(readOnly = true)
 	def list(){
-		return Game.list().collect {[it.id, it.name]}
+		return Game.list().collect {[id: it.id, name: it.name,
+			creator: it.creator.username, participants: it.participants*.username]}
 	}
 	
 	@Transactional(readOnly = true)

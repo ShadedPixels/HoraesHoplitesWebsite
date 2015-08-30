@@ -61,6 +61,22 @@ function main(){
         console.log("aggle aggle!");
     })
     
+    attach_listener("#refreshGames", "click", function(event){
+        console.log("refreshing games");
+        games = default_ajax_call({}, 'list games', function(data){
+	        console.log(data)
+			loadLeftTable(data);
+        });
+    })
+    
+    attach_listener("#refreshUsers", "click", function(event){
+        console.log("refreshing users");
+        default_ajax_call({}, 'list users', function(data){
+	        console.log(data);
+			loadRightTable(data);
+    });
+    })
+    
     attach_listener("#createGame", "submit", function(event){
     	var game_info = extract_form_information(this)
     	var data = {'game_name': game_info.gameName, 'creator_username': game_info.gameCreator} 
@@ -74,135 +90,90 @@ function main(){
 
     	default_ajax_call(data, "create user")
     })
-    
-	
-	//define Game class
-	var Game = function(def){
-		this.creator = def.creator;
-		this.participants = def.participants;
-		return;
-	};
 	
 	
-	function loadLeftTable(){
+	function loadLeftTable(games){
 	
-		//Filler Data for until database is ready
-		var games = [
-			new Game({"name":"banana","creator":"bb","participants":["dukakes","myself"]}),
-			new Game({"name":"gorilla","creator":"DK","participants":["DK","Tarzan"]}),
-			new Game({"name":"chimp","creator":"joe","participants":["joe","archibald"]}),
-			new Game({"name":"ape","creator":"schmoe","participants":["schmoe","bloe"]}),
-		];
+    	var TABLE_ID = "leftTable";
+    	var ROW_CLASS = TABLE_ID + "Row";
+    	
 	
 		//get leftTable
-		var target = document.getElementById("leftTable");
-		var crntData;
+		var table = $("#" + TABLE_ID);
 		var crntRow;
 		var l = games.length;//gameList.size;
 		
 		//create headings
-		crntRow = document.createElement("tr");
-		crntRow.className = "leftTableRow";//set table class for later css styling
-		
-		crntData = document.createElement("th");
-		crntData.innerHTML = "ID";
-		crntRow.appendChild(crntData);
-		
-		crntData = document.createElement("th");
-		crntData.innerHTML = "Name";
-		crntRow.appendChild(crntData);
-		
-		crntData = document.createElement("th");
-		crntData.innerHTML = "Creator";
-		crntRow.appendChild(crntData);
-		
-		crntData = document.createElement("th");
-		crntData.innerHTML = "Participants";
-		crntRow.appendChild(crntData);
-		
-		crntData = document.createElement("th");
-		crntData.innerHTML = "Join Game";
-		crntRow.appendChild(crntData);
-		
-		target.appendChild(crntRow);
+		crntRow = $("<tr>", {class: ROW_CLASS}) //set table class for later css styling
 		
 		//create data
-		for (i=0;i<l;i++){
-			crntRow = document.createElement("tr");
-			crntRow.className = "leftTableRow";//set table class for later css styling
+		$.each(games, function(index, game){
+			crntRow = $("<tr>", {class: ROW_CLASS}); //set table class for later css styling
 			
-			crntData = document.createElement("td");
-			crntData.innerHTML = i;
-			crntRow.appendChild(crntData);
-			
-			crntData = document.createElement("td");
-			crntData.innerHTML = games[i].name;
-			crntRow.appendChild(crntData);
-			
-			crntData = document.createElement("td");
-			crntData.innerHTML = games[i].creator;
-			crntRow.appendChild(crntData);
-			
-			crntData = document.createElement("td");
-			crntData.innerHTML = games[i].participants;
-			crntRow.appendChild(crntData);
+			$.each(['id', 'name', 'creator', 'participants'], function(index, property_name){
+				crntRow.append($("<td>", {class: TABLE_ID + property_name}).html(game[property_name]))
+			});
 			
 			//create buttons
-			crntData = document.createElement("td");
-			crntData.className = "joinButton";
-			crntData.innerHTML = "Join Game";
-			$(crntData).click = function(event){
-				var sendButton = $(event.target);
-				console.log(event);
-			};
-			crntRow.appendChild(crntData);
+			var button = $("<td>", {class: "joinButton"}).html("Join Game");
 			
-			target.appendChild(crntRow);
-		}
+			$(button).click(function(){
+				var id_cell = $(this).parent().find('.' + TABLE_ID + 'id') // first element of the parent, i.e. first cell in the row
+				var id = parseInt(id_cell.html()) // get numberic id from html content of first cell
+				
+				console.log(id)
+			});
+			
+			crntRow.append(button);
+			
+			table.append(crntRow);
+		 });
 		return;
 	};
 	
-	function loadRightTable(){
-		var playerList = [
-			"DK",
-			"bb",
-			"dukakes",
-			"myself",
-			"joe",
-			"bloe",
-			"schmoe"
-		];
+	function loadRightTable(playerList){
 		
-		var target = document.getElementById("rightTable");
+		
+		var target = $("#rightTable");
 		var crntData;
-		var crntRow;
+		
 		var l = playerList.length;//gameList.size;
 		
-		crntRow = document.createElement("tr");
-		crntRow.className = "rightTableRow";//set table class for later css styling
-		
-		crntData = document.createElement("th");
-		crntData.innerHTML = "Username";
-		crntRow.appendChild(crntData);
-		
-		target.appendChild(crntRow);
-		
 		for (i=0;i<l;i++){
-			crntRow = document.createElement("tr");
-			crntRow.className = "rightTableRow";//set table class for later css styling
+			var crntRow = $('<tr>', {class: "rightTableRow"}); //set table class for later css styling
 			
-			crntData = document.createElement("td");
-			crntData.innerHTML = playerList[i];
-			crntRow.appendChild(crntData);
+			crntData = $("<td>").html(playerList[i]);
 			
-			target.appendChild(crntRow);
+			crntRow.append(crntData);
+			
+			target.append(crntRow);
 		}
 		return;
 	};
 	
 	// things to execute immediately (should go last)
 	(function call_immediately(){
-		loadLeftTable();
-		loadRightTable();
-	})()
+		//Filler Data for until database is ready
+		var games = [
+			{id: 1, "name":"banana","creator":"bb","participants":["dukakes","myself"]},
+			{id: 2, "name":"gorilla","creator":"DK","participants":["DK","Tarzan"]},
+			{id: 3, "name":"chimp","creator":"joe","participants":["joe","archibald"]},
+			{id: 4, "name":"ape","creator":"schmoe","participants":["schmoe","bloe"]},
+		];
+		
+		var playerList = [
+		      			"DK",
+		      			"bb",
+		      			"dukakes",
+		      			"myself",
+		      			"joe",
+		      			"bloe",
+		      			"schmoe"
+		];
+		
+		
+		loadLeftTable(games);
+		loadRightTable(playerList);
+		
+	})();
 }; // end main

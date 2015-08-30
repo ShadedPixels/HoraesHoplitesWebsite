@@ -15,7 +15,7 @@ class UserService {
 	@Transactional(readOnly = true)
 	def list(){
 		return User.list().collect{
-			[it.username]
+			[username: it.username]
 		}
 	}
 	
