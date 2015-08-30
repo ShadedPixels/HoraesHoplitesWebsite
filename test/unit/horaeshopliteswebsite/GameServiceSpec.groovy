@@ -58,6 +58,6 @@ class GameServiceSpec extends Specification {
 			game = Game.findByName("game")
 		then:
 			success == true
-			game.refresh().participants.sort() == [creator, participant].sort()
+			game.participants.sort() == [creator, participant].sort()
 	}
 }

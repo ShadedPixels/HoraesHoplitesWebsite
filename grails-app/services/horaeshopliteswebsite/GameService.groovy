@@ -22,9 +22,12 @@ class GameService {
 			return [false, null]
 		}
 		
-		Game game = new Game(name: name, creator: creator).save();
+		Game game = new Game(name: name, creator: creator).save(flush: true)
+		
 		game.addToParticipants(creator)
-		game = game.save(flush:true)
+
+		game = game.save(flush: true)
+
 		if(game == null){
 			// if failed to save
 			return [false, null]
