@@ -27,7 +27,7 @@ class GameController {
 			case 'login':
 				if(User.findByUsername(data.username)){
 					session.user = data.username;
-					reply << [success: true, username: data.username, 
+					reply << [success: true, username: session.user, 
 						message: 'Logged in as ' + session.user]
 				}else{
 					reply << [success: false, message: 'no such user']
@@ -46,10 +46,14 @@ class GameController {
 				break
 				
 			case 'create game':
-				def game_name = data.game_name ?: ""
-				def creator_username = data.creator_username
-				def(success, game_id) = gameService.create(game_name, creator_username)
-				reply << ['success': success, 'game_id': game_id]
+				if(session.user){
+					def game_name = data.game_name ?: ''
+					def creator_username = session.user
+					def(success, game_id) = gameService.create(game_name, creator_username)
+					reply << ['success': success, 'game_id': game_id]
+				}else{
+					reply << ['success': false, 'message': "Failed to create game: you are not logged in"]
+				}
 				break
 				
 			case 'play singleplayer':

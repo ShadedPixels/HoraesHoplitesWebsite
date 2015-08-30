@@ -36,10 +36,6 @@
 						Game name:
 						<input type="text" name="gameName">
 					</label>
-					<label>
-						Creator username:
-						<input type="text" name="gameCreator">
-					</label>
 					<input type="submit" value="Create Game">
 				</form>
 				<div>

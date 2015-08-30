@@ -95,6 +95,8 @@ function main(){
 					if(data.success){
 						refresh_games();
 						console.log("successfully joined game");
+					}else{
+						console.log(data.message);
 					}
 				});
 			});
@@ -184,10 +186,14 @@ function main(){
 	    
 	    attach_listener("#createGame", "submit", function(event){
 	    	var game_info = extract_form_information(this)
-	    	var data = {'game_name': game_info.gameName, 'creator_username': game_info.gameCreator} 
+	    	var data = {'game_name': game_info.gameName} 
 
 	    	default_ajax_call(data, "create game", function(data){
-		    	refresh_games(); // refresh game list  		
+	    		if(data.success){
+			    	refresh_games(); // refresh game list 
+	    		}
+		    	console.log(data.message)
+
 	    	});
 	    });
 	    
