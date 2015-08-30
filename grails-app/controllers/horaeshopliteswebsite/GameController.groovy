@@ -12,7 +12,7 @@ class GameController {
     def index() { 
 		def map = []
 				
-		return []
+		return [session: session]
 	}
 	
 	def ajax_response(){
@@ -25,6 +25,19 @@ class GameController {
 		
 		switch (operation){
 			case 'login':
+				if(User.findByUsername(data.username)){
+					session.user = data.username;
+					reply << [success: true, username: data.username, 
+						message: 'Logged in as ' + session.user]
+				}else{
+					reply << [success: false, message: 'no such user']
+				}
+				
+				break
+			case 'logout':
+				session.user = null
+				session.invalidate()
+				reply << [success: true, message: 'Logged out successfully']
 				break
 				
 			case 'create user':
@@ -42,8 +55,12 @@ class GameController {
 			case 'play singleplayer':
 				break
 			case 'join game':
-				def success = gameService.join(data.game_id, data.username) // replace with session info later
-				reply << ['success': success]
+				if(session.user){
+					def success = gameService.join(data.game_id, session.user) // replace with session info later
+					reply << ['success': success]
+				}else{
+					reply << ['success': false, 'message': 'You are not logged in']
+				}
 				break
 				
 			case 'list users':

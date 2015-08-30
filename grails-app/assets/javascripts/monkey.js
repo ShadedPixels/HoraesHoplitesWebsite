@@ -79,18 +79,24 @@ function main(){
 		$.each(games, function(index, game){
 			crntRow = $("<tr>", {class: ROW_CLASS}); //set table class for later css styling
 			
-			$.each(['id', 'name', 'creator', 'participants'], function(index, property_name){
+			$.each(['id', 'name', 'creator'], function(index, property_name){
 				crntRow.append($("<td>", {class: TABLE_ID + property_name}).html(game[property_name]))
 			});
-			
+			crntRow.append($("<td>", {class: TABLE_ID + 'participants'}).html(
+					JSON.stringify(game['participants']))); // for now as row array, hence stringification
+
 			//create buttons
 			var button = $("<td>", {class: "joinButton"}).html("Join Game");
 			
 			$(button).click(function(){
 				var id_cell = $(this).parent().find('.' + TABLE_ID + 'id') // first element of the parent, i.e. first cell in the row
 				var id = parseInt(id_cell.html()) // get numberic id from html content of first cell
-				
-				console.log(id)
+				default_ajax_call({game_id: id}, 'join game', function(data){
+					if(data.success){
+						refresh_games();
+						console.log("successfully joined game");
+					}
+				});
 			});
 			
 			crntRow.append(button);
@@ -123,13 +129,13 @@ function main(){
 		return;
 	};
 	
-	var refresh_games = function refreshUsers(){
+	var refresh_games = function refresh_users(){
         games = default_ajax_call({}, 'list games', function(data){
 			loadLeftTable(data.game_array);
         });
 	};
 	
-	var refresh_users = function refreshGames() {
+	var refresh_users = function refresh_games() {
         default_ajax_call({}, 'list users', function(data){
 			loadRightTable(data.user_array);
         });
@@ -137,31 +143,40 @@ function main(){
 	
 	// things to execute immediately (should go last)
 	(function call_immediately(){
-		//Filler Data for until database is ready
-		var games = [
-			{id: 1, "name":"banana","creator":"bb","participants":["dukakes","myself"]},
-			{id: 2, "name":"gorilla","creator":"DK","participants":["DK","Tarzan"]},
-			{id: 3, "name":"chimp","creator":"joe","participants":["joe","archibald"]},
-			{id: 4, "name":"ape","creator":"schmoe","participants":["schmoe","bloe"]},
-		];
-		
-		var playerList = [
-			{username: "DK"},
-			{username: "bb"},
-			{username: "dukakes"},
-			{username: "myself"},
-			{username: "joe"},
-			{username: "bloe"},
-			{username: "schmoe"}
-		];
-		
-		
-		loadLeftTable(games);
-		loadRightTable(playerList);
 		
 		attach_listener("#playNow", "click", function(event){
 	        console.log("aggle aggle!");
-	    })
+	    });
+	    
+	    attach_listener("#login_form", "submit", function(event){
+	    	var login_info = extract_form_information(this)
+	    	default_ajax_call(login_info, 'login', function(data){
+	    		if(data.success){
+	    			$('#login_form').hide();
+	    			
+	    			var logged_in_status = $('#logged_in_status')
+	    			logged_in_status.html(data.message);
+	    			logged_in_status.show();
+	    			
+	    			$('#logout').show();
+	    		}else{
+	    			console.log("login failed");
+	    		}
+	    	});
+	    });
+	    
+	    attach_listener("#logout", "click", function(event){
+	    	default_ajax_call({}, 'logout', function(data){
+	    		if(data.success){
+	    			$('#login_form').show();
+	    			$('#logout').hide();
+	    			var logged_in_status = $('#logged_in_status')
+	    			logged_in_status.hide();
+	    			logged_in_status.html('');
+
+	    		}
+	    	});
+	    });
 	    
 	    attach_listener("#refreshGames", "click", refresh_games);
 	    
@@ -174,7 +189,7 @@ function main(){
 	    	default_ajax_call(data, "create game", function(data){
 		    	refresh_games(); // refresh game list  		
 	    	});
-	    })
+	    });
 	    
 	    attach_listener("#createUser", "submit", function(event){
 	    	var user_info = extract_form_information(this)
@@ -183,7 +198,10 @@ function main(){
 	    	default_ajax_call(data, "create user", function(data){
 		    	refresh_users(); // update user list
 	    	});
-	    })
+	    });
+	    
+	    refresh_games();
+	    refresh_users();
 		
 	})();
 }; // end main

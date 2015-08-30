@@ -59,5 +59,8 @@ class GameServiceSpec extends Specification {
 		then:
 			success == true
 			game.participants.sort() == [creator, participant].sort()
+			service.list() == [[id: game.id, name: game.name, creator: game.creator.username,
+				participants: ['creator', 'participant']	
+			]]
 	}
 }

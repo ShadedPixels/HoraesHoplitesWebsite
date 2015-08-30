@@ -8,15 +8,28 @@
         <script src='<g:resource dir="javascripts" file="monkey.js"/>'></script>
     </head>
     <body onload="main();">
-    	<div>
-			<form id=Control>
+    	<div id="top_section">
+			<form id="control">
 				<input type="button" value="PLAY NOW" id="playNow">
 				<input type="button" value="REFRESH GAMES" id="refreshGames">
 				<input type="button" value="REFRESH USERS" id="refreshUsers">
 				
 			</form>
+			<div id='login_container'>
+				<form id="login_form" <g:if test='${!!session.user}'> hidden='hidden'</g:if>>
+					<label>
+						Username:
+						<input type="text" name="username">
+					</label>
+					<input type="submit" value="Login">
+				</form>
+				<div id="logged_in_status" <g:if test='${!session.user}'> hidden='hidden'</g:if>>
+					<g:if test='${!!session.user}'>Logged in as ${session.user}</g:if>
+				</div>
+				<button id="logout" <g:if test='${!session.user}'> hidden='hidden'</g:if>>Logout</button>
+			</div>
 		</div>
-		<div>
+		<div id="main_section">
 			<div id="left">
 				<form id="createGame">
 					<label>
