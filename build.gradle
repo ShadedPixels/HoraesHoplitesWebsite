@@ -1,0 +1,41 @@
+
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath "org.grails:grails-gradle-plugin:2.1.2"
+  }
+}
+
+version "0.1"
+group "example"
+
+apply plugin: "grails"
+
+repositories {
+  grails.central() //creates a maven repo for the Grails Central repository (Core libraries and plugins)
+}
+
+grails {
+  grailsVersion = '2.4.4'
+}
+
+dependencies {
+  /*bootstrap "org.grails.plugins:tomcat:7.0.55" // No container is deployed by default, so add this*/
+
+  test "org.grails:grails-datastore-test-support:1.0.2-grails-2.4"
+
+  bootstrap "org.grails.plugins:tomcat:7.0.55"
+
+  // plugins for the compile step
+  compile "org.grails.plugins:scaffolding:2.1.2"
+  compile 'org.grails.plugins:cache:1.1.8'
+  compile "org.grails.plugins:asset-pipeline:1.9.9"
+  
+  // plugins needed at runtime but not for compilation
+  runtime "org.grails.plugins:hibernate4:4.3.6.1" // or ":hibernate:3.6.10.18"
+  runtime "org.grails.plugins:database-migration:1.4.0"
+  runtime "org.grails.plugins:jquery:1.11.1"
+
+}
