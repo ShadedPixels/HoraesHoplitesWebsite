@@ -35,7 +35,7 @@ function main(){
     	error_function = error_function || function(xhr){console.log("Error: ", xhr.responseText)}
     	
     	$.ajax({
-            url: "game/ajax_response",
+            url: "ajax_response",
             type:"post",
             dataType: 'json',
             data: {json_formatted_request: JSON.stringify({operation: operation, data: data})},

@@ -2,7 +2,7 @@ package horaeshopliteswebsite
 
 class Game {
 		
-	String name 
+	String name
 	User creator
 	
 	//static hasOne = [creator: User]
