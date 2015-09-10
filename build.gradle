@@ -4,17 +4,24 @@ buildscript {
     }
     repositories {
         mavenLocal()
-        maven { url "https://repo.grails.org/grails/core" }
+
 		mavenCentral() // decided to add the central one
-    }
+
+        maven { url "https://repo.grails.org/grails/core" }
+
+		maven{ url "https://plugins.gradle.org/m2/" } // for gradle-git
+
+	}
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
         classpath 'com.bertramlabs.plugins:asset-pipeline-gradle:2.1.1'
+		classpath "org.ajoberstar:gradle-git:1.3.0" // for git interactions
     }
 }
 
 plugins {
     id "io.spring.dependency-management" version "0.5.2.RELEASE"
+	id "com.moowork.node" version "0.10" // node plugin
 }
 
 version "0.1"
@@ -27,6 +34,10 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: "org.grails.grails-web"
 apply plugin: "org.grails.grails-gsp"
+
+apply plugin: "org.ajoberstar.grgit"
+
+apply plugin: "com.moowork.node" // node plugin
 
 ext {
     grailsVersion = project.grailsVersion
@@ -83,4 +94,50 @@ dependencies {
 
 task wrapper(type: Wrapper) {
     gradleVersion = gradleWrapperVersion
+}
+
+node {
+	// Version of node to use.
+	version = '0.11.10'
+
+	// Version of npm to use.
+	npmVersion = '2.1.5'
+
+	// Base URL for fetching node distributions (change if you have a mirror).
+	distBaseUrl = 'http://nodejs.org/dist'
+
+	// If true, it will download node using above parameters.
+	// If false, it will try to use globally installed node.
+	download = true
+
+	// Set the work directory for unpacking node
+	workDir = file("${project.buildDir}/nodejs")
+
+	// Set the work directory where node_modules should be located // doesn't work due to a bug
+	nodeModulesDir = file("${project.buildDir}/node_modules")
+}
+
+task clone_game(type: CloneGame){
+	
+}
+
+task install_browserify(type: NpmTask){
+	args = ['install', 'browserify']
+}
+
+task browserify_game(type: Exec, dependsOn: ['install_browserify', 'clone_game']) {
+	// TODO: fix paths for windows
+	// make sure joining paths is done by command rather than manually
+
+	def node_modules = node.nodeModulesDir 
+	def npm_bin = "${project.projectDir}/node_modules/.bin/"
+	def game_dir = "${project.buildDir}/game/"
+
+	def main_js = "${game_dir}/Infinite Sidescroller/GameCode/main.js"
+	def bundle_js = "${project.projectDir}/grails-app/assets/javascripts/bundle.js"
+	def browserify = "${npm_bin}/browserify"
+
+	workingDir project.projectDir
+
+	commandLine "${browserify}", "--debug", "${main_js}", "--outfile", "${bundle_js}"
 }
