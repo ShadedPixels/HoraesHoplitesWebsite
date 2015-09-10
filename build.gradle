@@ -141,3 +141,6 @@ task browserify_game(type: Exec, dependsOn: ['install_browserify', 'clone_game']
 
 	commandLine "${browserify}", "--debug", "${main_js}", "--outfile", "${bundle_js}"
 }
+
+war.dependsOn browserify_game
+run.dependsOn browserify_game
