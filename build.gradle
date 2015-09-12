@@ -121,11 +121,18 @@ task clone_game(type: CloneGame){
 	
 }
 
+task copy_assets(type: Copy, dependsOn: 'clone_game'){
+	// copy game assets to the grails project asset folder
+	from "${project.buildDir}/game/Infinite Sidescroller/GameCode/assets/art/"
+	into "${project.projectDir}/grails-app/assets/images/game/autoload/"
+
+}
+
 task install_browserify(type: NpmTask){
 	args = ['install', 'browserify']
 }
 
-task browserify_game(type: Exec, dependsOn: ['install_browserify', 'clone_game']) {
+task browserify_game(type: Exec, dependsOn: ['install_browserify', 'clone_game', 'copy_assets']) {
 	// TODO: fix paths for windows
 	// make sure joining paths is done by command rather than manually
 
@@ -144,3 +151,8 @@ task browserify_game(type: Exec, dependsOn: ['install_browserify', 'clone_game']
 
 war.dependsOn browserify_game
 run.dependsOn browserify_game
+
+clean { // simply adding new things to default clean task
+	delete "${project.projectDir}/grails-app/assets/images/game/autoload/*"
+	delete "${project.projectDir}/node_modules"
+}
