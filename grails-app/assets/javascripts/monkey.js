@@ -147,7 +147,10 @@ function main(){
 	(function call_immediately(){
 		
 		attach_listener("#playNow", "click", function(event){
-	        console.log("aggle aggle!");
+	        default_ajax_call({}, 'play singleplayer',
+	        function(data){
+				window.location = data.redirect_url
+	        })
 	    });
 	    
 	    attach_listener("#login_form", "submit", function(event){

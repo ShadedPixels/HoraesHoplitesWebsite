@@ -2,16 +2,40 @@ package horaeshopliteswebsite
 
 import grails.converters.JSON
 import org.grails.web.json.JSONObject
-
+import org.springframework.core.io.Resource
 class GameController {
 	
 	def userService
 	def gameService
 
+	def assetResourceLocator
+
     def index() { 
 		def map = []
 				
 		return [session: session]
+	}
+
+	def play(){
+	}
+
+	// render image
+	// accepts name argument through the params
+	def images(){
+		final String not_found_uri = 'game/autoload/ant.png'
+		String image_uri
+
+		if(params.filename){
+			image_uri = "game/autoload/${params.filename}"
+		}else{
+			image_uri = not_found_uri
+		}
+
+		Resource image = assetResourceLocator.findAssetForURI(image_uri)
+
+		image = image ?: assetResourceLocator.findAssetForURI(not_found_uri)
+
+		render file: image.inputStream, contentType: 'image/png'
 	}
 	
 	def ajax_response(){
@@ -56,6 +80,8 @@ class GameController {
 				break
 				
 			case 'play singleplayer':
+				def url = createLink(action: 'play')
+				reply << ['redirect_url': url]
 				break
 			case 'join game':
 				if(session.user){

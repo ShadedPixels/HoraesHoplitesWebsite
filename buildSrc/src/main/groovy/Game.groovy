@@ -43,7 +43,6 @@ class CloneGame extends DefaultTask {
 			grgit = Grgit.clone(
 					dir: dir.getAbsolutePath(),
 					uri: 'https://github.com/ShadedPixels/Multiplayer-Infinite-2-D-Side-Scroller.git',
-					refToCheckout: 'master'
 			)
 		}else{
 			grgit = Grgit.open(dir: dir.getAbsolutePath())

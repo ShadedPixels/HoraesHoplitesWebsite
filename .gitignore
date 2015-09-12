@@ -9,9 +9,17 @@
 
 # IDEA
 
-.idea/workspace.xml
+/.idea/workspace.xml
+/.idea/libraries/
+/.idea/artifacts/
+/.idea/uiDesigner.xml
+*.iml
+/classes
 
 /grails-app/assets/javascripts/bundle.js
 
 # temporarily, until bug is fixed and node_modules go to the build dir
 /node_modules
+
+# temporary? depending on how game gets included
+/grails-app/assets/images/game/autoload/

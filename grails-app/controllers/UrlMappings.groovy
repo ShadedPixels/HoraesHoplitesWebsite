@@ -7,6 +7,11 @@ class UrlMappings {
             }
         }
 
+		"/game/images/$filename"{
+			controller = "Game"
+			action = "images"
+		}
+
 
         "/"{                                                                    
             controller = "Home"                                                 
