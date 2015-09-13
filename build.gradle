@@ -156,3 +156,7 @@ clean { // simply adding new things to default clean task
 	delete "${project.projectDir}/grails-app/assets/images/game/autoload/*"
 	delete "${project.projectDir}/node_modules"
 }
+
+assets {
+	minifyJs = false // bundle gets screwed up by this
+}
