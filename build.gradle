@@ -146,6 +146,15 @@ task browserify_game(type: Exec, dependsOn: ['install_browserify', 'clone_game',
 
 	workingDir project.projectDir
 
+	def nodejs = new File("${project.buildDir}/nodejs")
+	def dirs = []
+	nodejs.eachFile(){
+		dirs << it.getAbsolutePath()
+	}
+	def node_bin = new File(dirs[0], 'bin').getAbsolutePath()
+
+	environment PATH: "${node_bin}:${System.env.PATH}"
+
 	commandLine "${browserify}", "--debug", "${main_js}", "--outfile", "${bundle_js}"
 }
 
