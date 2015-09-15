@@ -132,14 +132,17 @@ task install_browserify(type: NpmTask){
 	args = ['install', 'browserify']
 }
 
-task browserify_game(type: Exec, dependsOn: ['install_browserify', 'clone_game', 'copy_assets'])
+task get_node_dir(){
+	dependsOn install_browserify
+	doLast {
+		def nodejs = new File("${project.buildDir}/nodejs")
+		def dirs = []
+		nodejs.eachFile(){
+			dirs << it.getAbsolutePath()
+		}
+		def node_bin = new File(dirs[0], 'bin').getAbsolutePath()
+		project.ext['node_bin'] = node_bin
 
-
-browserify_game {
-	// TODO: fix paths for windows
-	// make sure joining paths is done by command rather than manually
-
-	doFirst{
 		def node_modules = node.nodeModulesDir 
 		def npm_bin = "${project.projectDir}/node_modules/.bin/"
 		def game_dir = "${project.buildDir}/game/"
@@ -148,21 +151,30 @@ browserify_game {
 		def bundle_js = "${project.projectDir}/grails-app/assets/javascripts/bundle.js"
 		def browserify = "${npm_bin}/browserify"
 
+		project.ext['main_js'] = main_js
+		project.ext['bundle_js'] = bundle_js
+		project.ext['browserify'] = browserify
 
 
-		def nodejs = new File("${project.buildDir}/nodejs")
-		def dirs = []
-		nodejs.eachFile(){
-			dirs << it.getAbsolutePath()
-		}
-		def node_bin = new File(dirs[0], 'bin').getAbsolutePath()
-
-		workingDir project.projectDir
-
-		environment PATH: "${node_bin}:${System.env.PATH}"
-
-		commandLine "${browserify}", "--debug", "${main_js}", "--outfile", "${bundle_js}"
 	}
+}
+
+task config_browserify_game(){
+	dependsOn get_node_dir
+	doLast{
+		browserify_game.commandLine "${project.ext.browserify}", "--debug", "${project.ext.main_js}", "--outfile", "${project.ext.bundle_js}"
+		browserify_game.environment PATH: "${project.ext.node_bin}:${System.env.PATH}"
+	}
+}
+
+task browserify_game(type: Exec, dependsOn: ['config_browserify_game', 'install_browserify', 'clone_game', 'copy_assets']) {
+	// TODO: fix paths for windows
+	// make sure joining paths is done by command rather than manually
+	workingDir project.projectDir
+
+	/*environment PATH: "${node_bin}:${System.env.PATH}"*/
+
+	/*commandLine "${browserify}", "--debug", "${main_js}", "--outfile", "${bundle_js}"*/
 }
 
 war.dependsOn browserify_game
